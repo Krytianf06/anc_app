@@ -1,5 +1,3 @@
-
-
 let idToken = "";
 let arrIdTakson = [];
 
@@ -36,10 +34,8 @@ setTimeout(() => {
     fetchHistory(idToken);
 }, 3000);
 
-
-
-  function fetchHistory(idToken) {
-    fetch('https://amunatcoll.pl:8000/anc/admin/get_taxon_edit_history/',
+function fetchHistory(idToken) {
+    fetch('https://amunatcoll.pl:8000/anc/taxons/search/',
       {
         mode: 'cors',
         method: 'POST',
@@ -50,11 +46,12 @@ setTimeout(() => {
           'Authorization': `${idToken}`
         }, body: JSON.stringify({
 
-          "filter": { "username": "kf63083@amu.edu.pl", "edition_type": "update", "od_daty": "2023-01-01", "do_daty": "2024-01-01" },
+          "filter": {"typ_kolekcji": "NHC-BOT", "panstwo" : "Polska" },
         
             "pagination": {
-            "currentPage": 5,
-            "perPage": 1000
+            "currentPage": 1,
+            "perPage": 10000
+            
             
           }
         })
@@ -64,75 +61,75 @@ setTimeout(() => {
   };
 
 function danePlki1(dane) {
-    console.log(dane);
+    // console.log(dane);
     const arrDane= [];
-    console.log("tu są dane");
+    // console.log("tu są dane");
     const info1 = dane.items;
     // console.log(info1);
     for (let i = 0; i < info1.length; i++) {
         const item2 = info1[i];
-            arrDane.push(item2.id)
+            arrDane.push(item2.kolekcjanumerokazu)
     
     } 
-    console.log(arrDane);
+    // console.log(arrDane);
     return arrIdTakson = arrDane;
 };
 
-
 setTimeout(() => {
     console.log(arrIdTakson);
-    console.log("działa tablica");
-}, 5000);
-    
+    // console.log("działa tablica");
 
+    for (let i = 0; i < arrIdTakson.length; i++) {
+        const item2 = arrIdTakson[i];
+                setTimeout(() => {
+                    fetchHistoryID(idToken, item2);
+                    // console.log("pentla");
+                }, 200);
+    }
+
+}, 50000);
+    
 
 // historia pliku
 
 
 
-    for (let i = 0; i < arrIdTakson.length; i++) {
-        const item2 = arrIdTakson[i];
-            setTimeout(() => {
-                fetchHistoryID(idToken, item2)
-            }, 200);
-    }
-
-
 
 
 function fetchHistoryID(idToken, idZmiany) {
-  fetch(`https://amunatcoll.pl:8000/anc/admin/get_taxon_edit_details/${idZmiany}/`,
-    {
-      mode: 'cors',
-      method: 'GET',
-      headers: {
+    fetch(`https://amunatcoll.pl:8000/anc/taxons/details/${idZmiany}/`,
+        {
+            mode: 'cors',
+            method: 'GET',
+            headers: {
         
-        'Authorization': `${idToken}`
-      }
-      })
+                'Authorization': `${idToken}`
+            }
+        })
     
-    .then(res => res.json())
-    .then((dane2) => danePlki2(dane2, idZmiany))
+        .then(res => res.json())
+        // .then((dane2) => console.log(dane2.dlugoscgeograficzna))
+        .then((dane2) => danePlki2(dane2, idZmiany))
 };
 
 function danePlki2(dane, idZmiany) {
     
-    const pole = dane.items[0].pole;
-    if (pole === "lowertaxon.0") {
-        console.log("jest takson");
-        console.log(dane);
-        console.log(pole);
+    const pole = dane.dlugoscgeograficzna;
+    const pole2 = dane.panstwo;
+    // console.log(dane);
+    console.log(pole2);
+    if (pole === null) {
+        console.log("Brak długości takson");
+        // console.log(dane);
+        // console.log(pole);
         console.log(idZmiany);
-    } else {
-        console.log("brak")
-      }
-} 
-  
-
-
-
-console.log(dane.items[0].pole);
-
-else {
-      console.log("brak zmiany taksonu")
+        
     }
+
+} 
+
+
+// else if (pole2 !== "Polska") {
+//     console.log("jest znalezione");
+//     console.log(idZmiany);
+// }

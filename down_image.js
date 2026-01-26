@@ -5,7 +5,7 @@ const url = require("url");
 
 const INPUT_FILE = path.resolve(__dirname, "urls.txt");
 const OUTPUT_DIR = path.resolve(__dirname, "downloaded_every5min");
-const CONCURRENT = 1;
+const CONCURRENT = 3;
 
 // Wyciąga numer edition z URL, np. .../edition/231006 -> 231006
 function extractEditionId(pageUrl) {
@@ -63,7 +63,7 @@ async function downloadTo(fileUrl, destPath) {
 async function processOnce() {
 	console.log(
 		new Date().toISOString(),
-		"Start pobierania - jednorazowe przejście"
+		"Start pobierania - jednorazowe przejście",
 	);
 	const pages = await readInputUrls();
 	const editions = pages.map(extractEditionId).filter(Boolean);
@@ -100,7 +100,7 @@ async function processOnce() {
 				} else {
 					name = fileNameFromResponseUrl(
 						resp.request?.res?.responseUrl || dlUrl,
-						`edition-${item.id}`
+						`edition-${item.id}`,
 					);
 				}
 
@@ -123,7 +123,7 @@ async function processOnce() {
 			} catch (err) {
 				console.error(
 					`[${current}] Błąd pobierania edition ${item.id}:`,
-					err.message || err
+					err.message || err,
 				);
 			}
 		}
@@ -134,7 +134,7 @@ async function processOnce() {
 
 async function startScheduler() {
 	console.log(
-		"Uruchamiam jednorazowe pobieranie (po zakończeniu skrypt zakończy działanie)"
+		"Uruchamiam jednorazowe pobieranie (po zakończeniu skrypt zakończy działanie)",
 	);
 	await processOnce();
 	console.log("Wszystkie pobrania zakończone — kończę proces.");

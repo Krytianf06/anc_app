@@ -4,9 +4,9 @@ const fs = require("fs-extra");
 const path = require("path");
 const url = require("url");
 
-const PAGE_URL = 'https://rhus-103.man.poznan.pl/dlibra/results?q=POZ-V&action=SimpleSearchAction&type=-6&p=7&ipp=5000';
-const OUT_FILE = path.resolve(__dirname, 'urls.txt');
-
+const PAGE_URL =
+	"https://rhus-103.man.poznan.pl/dlibra/results?q=POZ-V&action=SimpleSearchAction&type=-6&p=8&ipp=5000";
+const OUT_FILE = path.resolve(__dirname, "urls.txt");
 
 async function fetchHtml(pageUrl) {
 	const resp = await axios.get(pageUrl, {
